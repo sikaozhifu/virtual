@@ -1,0 +1,196 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>公告系统详情</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/jquery-3.3.1.min.js"></script>
+    <script src="/layui.js"></script>
+    <link rel="stylesheet" href="/css/layui.css">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/notice_detail.css" rel="stylesheet">
+
+</head>
+<body>
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>最新公告</strong>
+            </a>
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>最热公告</strong>
+            </a>
+            <ul class="layui-nav" th:if="${session.user ne null}">
+                <li class="layui-nav-item">
+                    <a href="/home" class="navbar-brand d-flex align-items-center">
+                        我的
+                    </a>
+                    <input type="hidden" value="0" id="home" th:value="${session.user.userId}">
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">我的收藏</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="/logout">退出</a></li>
+            </ul>
+            <a th:if="${session.user eq null}" href="/login" class="navbar-brand d-flex align-items-center">
+                <strong>登录</strong>
+            </a>
+        </div>
+    </div>
+    <div class="row flex-nowrap justify-content-between align-items-center" style="margin-top: 30px">
+        <div class="col-4 pt-1">
+        </div>
+        <div class="col-4 text-center">
+            <a class="blog-header-logo text-dark" href="#" th:text="${notice.title}"></a>
+        </div>
+        <div class="col-4 d-flex justify-content-end align-items-center">
+
+        </div>
+    </div>
+</header>
+
+<main role="main">
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 blog-main">
+                    <h5 class="mb-4 text-right">
+                        收藏：<i id="collect" class="layui-icon layui-icon-heart" style="font-size: 30px; color: #FF5722;" th:onclick="'javascript:collectBtn()'"></i>
+                        <input type="hidden" value="0" id="collectValue">
+                    </h5>
+                    <h5 class="mb-4 text-right" th:text="'时间：'+${#dates.format(notice.updateTime,'yyyy-MM-dd HH:mm:ss')}">
+                        时间：2020年10月23日 14:24
+                    </h5>
+                    <h5 class="mb-4 border-bottom text-right" th:text="'作者：' + ${notice.author}">
+                        作者：tom
+                    </h5>
+                    <div class="blog-post" th:utext="${notice.content}">
+                        公告内容
+                    </div><!-- /.blog-post -->
+
+                    <!-- 上一篇和下一篇-->
+<!--                    <nav class="blog-pagination">-->
+<!--                        <a class="btn btn-outline-primary" href="#">上一篇</a>-->
+<!--                        <a class="btn btn-outline-secondary" href="#" tabindex="-1" aria-disabled="true" style="float: right">下一篇</a>-->
+<!--                    </nav>-->
+
+                </div><!-- /.blog-main -->
+
+            </div><!-- /.row -->
+
+        </div><!-- /.container -->
+    </div>
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p style="color: #000000">版权所有：中北大学 &nbsp; &nbsp;地址：山西省太原市学院路3号 &nbsp; &nbsp; 非经营性互联网信息服务审批号 (晋)ICP备05000467号 <img src="/images/police.png" />&nbsp;<a href="target=" recordcode="14010002001550" style="color: #000000">晋公网安备 14010002001550号</a></p>
+        <p style="text-align: center"><a href="/admin/">后台管理</a></p>
+    </div>
+</footer>
+
+</body>
+<script>
+    $(document).ready(function () {
+        if ([[${session.user eq null}]]){
+            console.log("未登录……");
+        }else{
+            $.ajax({
+                type:"post",
+                url:"/collect/get",
+                data:{
+                    "userId":$("#home").val(),
+                    "noticeId":[[${notice.noticeId}]]
+                },
+                success:function (data) {
+                    if (data == 1){
+                        //当前为收藏状态
+                        $("#collect").attr("class","layui-icon layui-icon-heart-fill");
+                        $("#collectValue").attr("value",1);
+                        //已收藏，点击之后就是未收藏
+                    }else if(data == 0){
+                        //当前为未收藏
+                        //位收藏，点击之后判断是执行收藏还是取消收藏
+                    }
+                }
+            });//ajax
+        }
+    });
+
+    //收藏函数
+    collectBtn = function() {
+        if ([[${session.user eq null}]]){
+            alert("登录后收藏");
+        }else{
+            if ($("#collectValue").val() == 1){
+                //当前为收藏状态，点击之后执行取消操作
+                $.ajax({
+                    type: "post",
+                    url: "/collect/update",
+                    data: {
+                        "userId":$("#home").val(),
+                        "noticeId": [[${notice.noticeId}]],
+                        "collected":0
+                    },
+                    success: function (data) {
+                        if (data == 1){
+                            //表示取消收藏成功
+                            $("#collect").attr("class","layui-icon layui-icon-heart");
+                            $("#collectValue").attr("value",0);
+                        }else{
+                            alert("取消收藏失败……");
+                        }
+                    }
+                });
+            }else if($("#collectValue").val() == 0){
+                //当前为未收藏状态，点击之后执行收藏操作
+                $.ajax({
+                    type: "post",
+                    url: "/collect/update",
+                    data: {
+                        "userId":$("#home").val(),
+                        "noticeId": [[${notice.noticeId}]],
+                        "collected":1
+                    },
+                    success: function (data) {
+                        if (data == 1){
+                            //表示收藏成功
+                            $("#collect").attr("class","layui-icon layui-icon-heart-fill");
+                            $("#collectValue").attr("value",1);
+                        }else{
+                            alert("收藏失败……");
+                        }
+                    }
+                });//ajax
+            }
+        }
+
+    }
+</script>
+</html>

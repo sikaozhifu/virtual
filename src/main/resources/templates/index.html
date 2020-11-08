@@ -1,0 +1,175 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>公告系统首页</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/jquery-3.3.1.min.js"></script>
+    <script src="/layui.js"></script>
+    <link rel="stylesheet" href="/css/layui.css">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+        .text3{ //显示3行，多余的文字用省略号代替
+            word-break:break-all;
+            display:-webkit-box;
+            -webkit-line-clamp:3;
+            -webkit-box-orient:vertical;
+            overflow:hidden;
+        }
+        .text1{ //显示1行，多余的文字用省略号代替
+        word-break:break-all;
+            display:-webkit-box;
+            -webkit-line-clamp:1;
+            -webkit-box-orient:vertical;
+            overflow:hidden;
+        }
+    </style>
+    <!-- Custom styles for this template -->
+<!--    <link href="/css/index.css" rel="stylesheet">-->
+    <link href="/css/notice_detail.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>最新公告</strong>
+            </a>
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>最热公告</strong>
+            </a>
+            <ul class="layui-nav" th:if="${session.user ne null}">
+                <li class="layui-nav-item">
+                    <a href="/home" class="navbar-brand d-flex align-items-center">
+                        我的
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">我的收藏</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="/logout">退出</a></li>
+            </ul>
+            <a th:if="${session.user eq null}" href="/login" class="navbar-brand d-flex align-items-center">
+                <strong>登录</strong>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main role="main">
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1>公告发布系统</h1>
+            <p class="lead text-muted" style="margin-top: 15px">校园信息，失物招领，招聘信息，社团纳新……</p>
+<!--            <p>-->
+<!--                <a href="#" class="btn btn-primary my-2">Main call to action</a>-->
+<!--                <a href="#" class="btn btn-secondary my-2">Secondary action</a>-->
+<!--            </p>-->
+        </div>
+    </section>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <!--/*@thymesVar id="dataVo" type="templates"*/-->
+                <div class="col-md-4" th:each="notice:${dataVo.data}">
+                    <div class="card mb-4 shadow-sm">
+                        <img th:src="${notice.cover}" width="100%" height="225"/>
+                        <div class="card-body" style="height: 216px">
+                            <h3 class="card-title text1" th:text="${notice.title}">公告标题</h3>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="${notice.author}">公告作者</h6>
+                            <!--/*@thymesVar id="test" type="templates"*/-->
+                            <!--/*@thymesVar id="notice" type="templates"*/-->
+                            <div class="text3">
+                                <p class="card-text" th:utext="${notice.content}">This content is a little bit longer.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center" style="margin-top: 30px">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="'javascript:select_notice('+${notice.noticeId}+')'">查看</button>
+                                </div>
+                                <p class="text-muted" th:text="${#dates.format(notice.updateTime,'yyyy-MM-dd HH:mm:ss')}">浏览：520</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- 分页-->
+            <div class="row" style="margin-top: 100px">
+                <div id="test1" style="margin: 0px auto"></div>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p style="color: #000000">版权所有：中北大学 &nbsp; &nbsp;地址：山西省太原市学院路3号 &nbsp; &nbsp; 非经营性互联网信息服务审批号 (晋)ICP备05000467号 <img src="/images/police.png" />&nbsp;<a href="target=" recordcode="14010002001550" style="color: #000000">晋公网安备 14010002001550号</a></p>
+        <p style="text-align: center"><a href="/admin/">后台管理</a></p>
+    </div>
+</footer>
+
+</body>
+<script>
+    layui.use('laypage', function () {
+        var laypage = layui.laypage;
+        var $ = layui.jquery;
+        laypage.render({
+            elem: 'test1'
+            ,count: [[${dataVo.count}]] //数据总数，从服务端得到
+            ,theme: '#343A40'
+            ,limit: 6
+            ,curr: [[${dataVo.curr}]]
+            ,jump: function(obj, first){
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+
+                //首次不执行
+                if(!first){
+                    //do something
+                    window.location.href = "/notice_list?page="+obj.curr+"&limit="+obj.limit;
+                    // $.ajax({
+                    //     type:"get",
+                    //     url:"/notice_list",
+                    //     data:{
+                    //         page: obj.curr,
+                    //         limit: obj.limit
+                    //     }
+                    // })
+                }
+            }
+        });
+    })
+</script>
+<script>
+    select_notice = function (noticeId) {
+        window.location.href = "/notice/"+noticeId;
+    }
+</script>
+</html>

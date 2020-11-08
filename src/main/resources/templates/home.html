@@ -1,0 +1,353 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>公告系统详情</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/jquery-3.3.1.min.js"></script>
+    <script src="/layui.js"></script>
+    <link rel="stylesheet" href="/css/layui.css">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/notice_detail.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>最新公告</strong>
+            </a>
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <strong>最热公告</strong>
+            </a>
+            <ul class="layui-nav" th:if="${session.user ne null}">
+                <li class="layui-nav-item">
+                    <a href="/home" class="navbar-brand d-flex align-items-center">
+                        我的
+                    </a>
+<!--                    <dl class="layui-nav-child">-->
+<!--                        <dd><a href="">基本资料</a></dd>-->
+<!--                        <dd><a href="">我的收藏</a></dd>-->
+<!--                    </dl>-->
+                </li>
+                <li class="layui-nav-item"><a href="/logout">退出</a></li>
+            </ul>
+            <a th:if="${session.user eq null}" href="/login" class="navbar-brand d-flex align-items-center">
+                <strong>登录</strong>
+            </a>
+        </div>
+    </div>
+    <div class="row flex-nowrap justify-content-between align-items-center" style="margin-top: 30px">
+        <div class="col-2 pt-1">
+        </div>
+        <div class="col-8 text-center">
+            <div class="layui-tab layui-tab-card" lay-filter="demo">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本资料</li>
+                    <li>我的收藏</li>
+                    <li>修改密码</li>
+                </ul>
+                <div class="layui-tab-content" style="height: 600px;">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-block">
+                                    <input th:value="${session.user.username}" type="text" id="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" style="width: 300px" disabled>
+                                    <div class="layui-form-mid layui-word-aux">用户名不可修改</div>
+                                </div>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">姓名</label>
+                                <div class="layui-input-block">
+                                    <input th:value="${session.user.name}" type="text" id="name" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" style="width: 300px">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block" style="width: 300px">
+                                    <select id="sex" lay-filter="sex" th:value="${session.user.sex}">
+                                        <option value="">请选择性别</option>
+                                        <option th:selected="${session.user.sex=='保密'}" value="保密">保密</option>
+                                        <option th:selected="${session.user.sex=='男'}" value="男">男</option>
+                                        <option th:selected="${session.user.sex=='女'}" value="女">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">电话</label>
+                                <div class="layui-input-block">
+                                    <input th:value="${session.user.phone}" type="text" id="phone" required  lay-verify="required" placeholder="请输入联系方式" autocomplete="off" class="layui-input" style="width: 300px">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="formUpdate">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 我的收藏-->
+                    <div class="layui-tab-item">
+                        <table class="layui-hide" id="test" lay-filter="test" lay-size="lg"></table>
+                    </div>
+
+                    <!-- 修改密码-->
+                    <div class="layui-tab-item">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">新密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" id="password" required  lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input" style="width: 300px">
+
+                                </div>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">确认</label>
+                                <div class="layui-input-block">
+                                    <input type="password" id="rePassword" required  lay-verify="required" placeholder="再一次输入密码" autocomplete="off" class="layui-input" style="width: 300px">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="formPassword">立即提交</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2 d-flex justify-content-end align-items-center">
+
+        </div>
+    </div>
+</header>
+
+<main role="main">
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 blog-main">
+                    <div class="blog-post">
+
+
+                    </div><!-- /.blog-post -->
+
+                </div><!-- /.blog-main -->
+
+            </div><!-- /.row -->
+
+        </div><!-- /.container -->
+    </div>
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p style="color: #000000">版权所有：中北大学 &nbsp; &nbsp;地址：山西省太原市学院路3号 &nbsp; &nbsp; 非经营性互联网信息服务审批号 (晋)ICP备05000467号 <img src="/images/police.png" />&nbsp;<a href="target=" recordcode="14010002001550" style="color: #000000">晋公网安备 14010002001550号</a></p>
+        <p style="text-align: center"><a href="/admin/">后台管理</a></p>
+    </div>
+</footer>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" lay-event="del">取消收藏</a>
+</script>
+</body>
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form', 'element', 'table'], function(){
+        var layer = layui.layer
+            ,form = layui.form
+            ,element = layui.element
+            ,table = layui.table;
+
+        // layer.msg('Hello World');
+        //一些事件监听
+        element.on('tab(demo)', function(data){
+            // console.log(data);
+            if (data.index == 1){
+                //我的收藏
+                table.render({
+                    elem: '#test',
+                    url: '/collect/getList/'+[[${session.user.userId}]],
+                    // totalRow: true,//自动合计功能
+                    cols: [
+                        [{
+                            title: '序号',
+                            type: 'numbers',
+                            fixed: 'left',
+                            width: 80
+                        },
+                            {
+                                field: 'title',
+                                title: '公告标题',
+                                unresize: true,
+                            },
+                            {
+                                field: 'noticeId',
+                                title: '公告ID',
+                                unresize: true,
+                                hide:true
+                            },
+                            {
+                                fixed: 'right',
+                                title: '操作',
+                                toolbar: '#barDemo',
+                                width: 100
+                            }
+                        ]
+                    ],
+                    page: true
+                });
+
+                //监听工具条
+                table.on('tool(test)', function(obj){
+                    let data = obj.data;
+                    if(obj.event === 'del'){
+                        layer.confirm('真的取消收藏么', function(index){
+                            obj.del();
+                            $.ajax({
+                                url: "/collect/update",
+                                type: "POST",
+                                data:{
+                                    'userId':[[${session.user.userId}]],
+                                    'noticeId':data.noticeId,
+                                    'collected':0
+                                },
+                                dataType:"json",
+                                success:function (res) {
+                                    if (res == 1){
+                                        layer.alert("取消收藏成功！",{icon: 6})
+                                    }else {
+                                        layer.alert("取消收藏失败！",{icon: 5})
+                                    }
+                                    layer.close(index)
+                                }
+                            });
+                        });
+                    }//if-del
+                });
+            }
+        });
+    });
+
+    layui.use(['form', 'layer', 'jquery'], function () {
+        var form = layui.form,
+            layer = parent.layer === undefined ? layui.layer : top.layer
+        $ = layui.jquery;
+
+        //提交按钮
+        form.on('submit(formUpdate)', function (data) {
+            $.ajax({
+                type:"POST",
+                url: '/user/update',
+                dataType: 'json',
+                data: {
+                    "username":$("#username").val(),
+                    "name": $("#name").val(),
+                    "sex": $("#sex").val(),
+                    "phone": $("#phone").val()
+                },
+                async: false,
+                success: function (res) {
+                    console.log(res);
+                    if (res == 1){
+                        layer.open({
+                            title: '信息修改',
+                            content: '修改成功！',
+                            icon:6,
+                            end:function () {
+                                parent.location.reload();
+                            }
+                        });
+                        // layer.close(index);
+                        // window.parent.location.reload();
+                    } else {
+                        layer.open({
+                            title: '信息修改',
+                            content: '修改失败！',
+                            icon:5,
+                            end:function () {
+                                parent.location.reload();
+                            }
+                        });
+                    }
+
+                }
+            });
+        });
+
+        //修改密码
+        form.on('submit(formPassword)', function (data) {
+            var password = $('#password').val();
+            var rePassword = $('#rePassword').val();
+            if ($.trim(password) != $.trim(rePassword)){
+                layer.alert("两次输入密码不一致！");
+                return false;
+            }
+            $.ajax({
+                type:"POST",
+                url: '/user/updatePassword',
+                dataType: 'json',
+                data: {
+                    "username":$("#username").val(),
+                    "password": $("#password").val()
+                },
+                async: false,
+                success: function (res) {
+                    console.log(res);
+                    if (res == 1){
+                        layer.open({
+                            title: '信息修改',
+                            content: '修改成功！',
+                            icon:6,
+                            end:function () {
+                                parent.location.reload();
+                            }
+                        });
+                        // layer.close(index);
+                        // window.parent.location.reload();
+                    } else {
+                        layer.open({
+                            title: '信息修改',
+                            content: '修改失败！',
+                            icon:5,
+                            end:function () {
+                                parent.location.reload();
+                            }
+                        });
+                    }
+
+                }
+            });
+        });
+    });
+</script>
+</html>
